@@ -1,4 +1,8 @@
 <?php
+namespace Collab\Framework;
+
+use Collab\Framework\ITemplateManager;
+use Smarty;
 
 class SmartyTemplateManager extends Smarty implements ITemplateManager {
 

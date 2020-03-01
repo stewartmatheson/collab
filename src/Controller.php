@@ -1,5 +1,9 @@
 <?php
 
+namespace Collab;
+
+use Collab\Framework\ITemplateManager;
+
 class Controller {
 
     private ITemplateManager $templateManager;

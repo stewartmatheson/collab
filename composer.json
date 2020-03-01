@@ -8,5 +8,11 @@
             "name": "Stewart Matheson",
             "email": "stew@rtmatheson.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "autoload": {
+        "psr-4": {"Collab\\": "src/"}
+    }
 }

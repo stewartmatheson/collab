@@ -7,11 +7,10 @@
 
 <?php
 
-require '../vendor/smarty/smarty/libs/Smarty.class.php';
-require '../src/Framework/ITemplateManager.php';
-require '../src/Framework/SmartyTemplateManager.php';
-require '../src/Application.php';
-require '../src/Controller.php';
+require '../vendor/autoload.php';
+use Collab\Framework\SmartyTemplateManager;
+use Collab\Controller;
+use Collab\Application;
 
 $templateManager = new SmartyTemplateManager();
 $controller = new Controller($templateManager);

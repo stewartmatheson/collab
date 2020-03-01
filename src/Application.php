@@ -1,5 +1,7 @@
 <?php
 
+namespace Collab;
+
 class Application {
 
     private Controller $controller;
