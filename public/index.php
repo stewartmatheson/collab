@@ -1,9 +1,10 @@
 <?php
 
 require '../vendor/autoload.php';
-use Collab\Framework\SmartyTemplateManager;
+
 use Collab\Controller;
 use Collab\Application;
+use Collab\SmartyTemplateManager;
 
 $templateManager = new SmartyTemplateManager();
 $controller = new Controller($templateManager);

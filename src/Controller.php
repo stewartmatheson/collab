@@ -2,7 +2,7 @@
 
 namespace Collab;
 
-use Collab\Framework\ITemplateManager;
+use Collab\ITemplateManager;
 
 class Controller {
 
