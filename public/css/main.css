@@ -119,6 +119,22 @@ main {
     margin: 0 auto;
 }
 
+main #announce {
+    padding: 1.5em 1em;
+    background-color: rgb(245, 248, 255);
+    margin-bottom: 1em;
+}
+
+
+textarea {
+    box-sizing: border-box;
+    padding: 1em;
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    height: 10em;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
