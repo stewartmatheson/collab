@@ -1,0 +1,117 @@
+{
+    "Resources" : {
+        "CollabVPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16"
+            }
+        },
+
+        "PrivateSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": { "Ref": "CollabVPC" },
+                "CidrBlock": "10.0.0.0/24",
+                "AvailabilityZone": "ap-southeast-2a"
+            }
+        },
+
+        "BuildServiceRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "Policies": [
+                    {
+                        "PolicyName": "AllowCodeBuildToVPC",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow", 
+                                    "Action": [
+                                        "ec2:DescribeSecurityGroups",
+                                        "ec2:DescribeSubnets",
+                                        "ec2:DescribeNetworkInterfaces"
+                                    ], 
+                                    "Resource": "*" 
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "codebuild.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+
+        "BuildServiceSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "ApplicationBuildSecurityGroup",
+                "VpcId": { "Ref": "CollabVPC" }
+            }
+        },
+
+        "CollabVolumes": {
+            "Type": "AWS::EFS::FileSystem",
+            "Properties": {}
+        },
+
+        "ApplicationBuild": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Name": "PublishCollabDockerVolume",
+                "Description": "Build the latest Collab source code application volume",
+                "Artifacts": {
+                    "Type": "NO_ARTIFACTS"
+                },
+                "Environment": {
+                    "ComputeType": "BUILD_GENERAL1_SMALL",
+                    "Image": "aws/codebuild/amazonlinux2-x86_64-standard:2.0",
+                    "Type": "LINUX_CONTAINER",
+                    "PrivilegedMode": true
+                },
+                "FileSystemLocations": [
+                    {
+                        "Identifier": "CollabDockerVolumes",
+                        "Location": { 
+                            "Fn::Join" : [ 
+                                "",
+                                [
+                                    { "Ref": "CollabVolumes" },
+                                    ".efs.ap-southeast-2.amazonaws.com:/"
+                                ]
+                            ]
+                        },
+                        "MountPoint": "/var/lib/docker/volumes",
+                        "Type": "EFS"
+                    }
+                ],
+                "ServiceRole": { "Ref": "BuildServiceRole" },
+                "Source": {
+                    "Type": "GITHUB",
+                    "Location": "https://github.com/stewartmatheson/collab.git"
+                },
+                "VpcConfig": {
+                    "VpcId": { "Ref": "CollabVPC" },
+                    "Subnets": [ {"Ref": "PrivateSubnet"} ],
+                    "SecurityGroupIds": [ { "Ref": "BuildServiceSecurityGroup"} ]
+                }
+            }
+        }
+
+    }
+}

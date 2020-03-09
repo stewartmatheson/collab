@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+    test:
+        commands:
+            - docker -u 1000:1000 run test
+
+    build:
+        commands:
+            - docker -u 1000:1000 create volume
