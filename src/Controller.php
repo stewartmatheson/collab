@@ -7,9 +7,11 @@ use Collab\ITemplateManager;
 class Controller {
 
     private ITemplateManager $templateManager;
+    private PostsService $postsService;
 
-    function __construct(ITemplateManager $templateManager) {
+    function __construct(ITemplateManager $templateManager, PostsService $postsService) {
         $this->templateManager = $templateManager;
+        $this->postsService = $postsService;
     }
 
     public function index() {
@@ -18,6 +20,7 @@ class Controller {
 
     public function about() {
         $this->templateManager->render("about");
+        phpinfo();
     }
 
     public function notFound() {
