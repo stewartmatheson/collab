@@ -235,8 +235,7 @@
                 },
                 "LogsConfig": {
                     "CloudWatchLogs": {
-                        "Status": "ENABLED",
-                        "GroupName": "CollabVolumeBuild"
+                        "Status": "DISABLED"
                     }
                 }
             }
