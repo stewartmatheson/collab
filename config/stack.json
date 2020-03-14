@@ -3,7 +3,31 @@
         "CollabVPC": {
             "Type": "AWS::EC2::VPC",
             "Properties": {
-                "CidrBlock": "10.0.0.0/16"
+                "CidrBlock": "10.192.0.0/16"
+            }
+        },
+
+        "InternetGateway" : {
+            "Type" : "AWS::EC2::InternetGateway",
+            "Properties" : {}
+        },
+
+        "VPCGatewayAttachment": {
+            "Type" : "AWS::EC2::VPCGatewayAttachment",
+            "Properties" : {
+                "InternetGatewayId": { "Ref": "InternetGateway" },
+                "VpcId": { "Ref": "CollabVPC" }
+            }
+        },
+
+        "PublicSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "CollabVPC",
+            "Properties": {
+                "VpcId": { "Ref": "CollabVPC" },
+                "CidrBlock": "10.192.10.0/24",
+                "AvailabilityZone": "ap-southeast-2a",
+                "MapPublicIpOnLaunch": true
             }
         },
 
@@ -12,8 +36,98 @@
             "DependsOn": "CollabVPC",
             "Properties": {
                 "VpcId": { "Ref": "CollabVPC" },
-                "CidrBlock": "10.0.0.0/24",
-                "AvailabilityZone": "ap-southeast-2a"
+                "CidrBlock": "10.192.20.0/24",
+                "AvailabilityZone": "ap-southeast-2a",
+                "MapPublicIpOnLaunch": false
+            }
+        },
+
+        "NatGatewayEIP": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc"
+            }
+        },
+
+        "NatGateway": {
+            "Type": "AWS::EC2::NatGateway",
+            "DependsOn": "VPCGatewayAttachment",
+            "Properties": {
+                "AllocationId" : {
+                    "Fn::GetAtt" : [
+                        "NatGatewayEIP",
+                        "AllocationId"
+                    ]
+                },
+                "SubnetId": { 
+                    "Ref": "PublicSubnet"
+                }
+
+            }
+        },
+
+        "PublicRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+                "VpcId": { "Ref": "CollabVPC" }
+            }
+        },
+
+        "DefaultPublicRoute" : {
+            "Type" : "AWS::EC2::Route",
+            "Properties" : {
+                "RouteTableId" : {
+                    "Ref" : "PublicRouteTable"
+                },
+                "DestinationCidrBlock" : "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+
+        "PublicSubnetRouteTableAssiocation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "PublicRouteTable"},
+                "SubnetId": { "Ref": "PublicSubnet"}
+            }
+        },
+
+        "PrivateRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+                "VpcId": { "Ref": "CollabVPC" }
+            }
+        },
+
+        "DefaultPrivateRoute" : {
+            "Type" : "AWS::EC2::Route",
+            "Properties" : {
+                "RouteTableId" : {
+                    "Ref" : "PrivateRouteTable"
+                },
+                "DestinationCidrBlock" : "0.0.0.0/0",
+                "NatGatewayId" : {
+                    "Ref" : "NatGateway"
+                }
+            }
+        },
+
+        "PrivateSubnetRouteTableAssiocation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "PrivateRouteTable"},
+                "SubnetId": { "Ref": "PrivateSubnet"}
+            }
+        },
+
+        "NoIngressSecurityGroup":{
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupName": "no-ingress-sg",
+                "GroupDescription": "Security group with no ingress rule",
+                "VpcId": { "Ref": "CollabVPC"} 
             }
         },
 
