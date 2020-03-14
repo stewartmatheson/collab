@@ -9,6 +9,7 @@
 
         "PrivateSubnet": {
             "Type": "AWS::EC2::Subnet",
+            "DependsOn": "CollabVPC",
             "Properties": {
                 "VpcId": { "Ref": "CollabVPC" },
                 "CidrBlock": "10.0.0.0/24",
@@ -28,9 +29,16 @@
                                 {
                                     "Effect": "Allow", 
                                     "Action": [
-                                        "ec2:DescribeSecurityGroups",
+                                        "ec2:CreateNetworkInterface",
+                                        "ec2:CreateNetworkInterfacePermission",
+                                        "ec2:DescribeDhcpOptions",
+                                        "ec2:DescribeNetworkInterfaces",
+                                        "ec2:DeleteNetworkInterface",
                                         "ec2:DescribeSubnets",
-                                        "ec2:DescribeNetworkInterfaces"
+                                        "ec2:DescribeSecurityGroups",
+                                        "ec2:DescribeVpcs",
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream"
                                     ], 
                                     "Resource": "*" 
                                 }
@@ -59,6 +67,7 @@
 
         "BuildServiceSecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
+            "DependsOn": "CollabVPC",
             "Properties": {
                 "GroupDescription": "ApplicationBuildSecurityGroup",
                 "VpcId": { "Ref": "CollabVPC" }
@@ -109,6 +118,12 @@
                     "VpcId": { "Ref": "CollabVPC" },
                     "Subnets": [ {"Ref": "PrivateSubnet"} ],
                     "SecurityGroupIds": [ { "Ref": "BuildServiceSecurityGroup"} ]
+                },
+                "LogsConfig": {
+                    "CloudWatchLogs": {
+                        "Status": "ENABLED",
+                        "GroupName": "CollabVolumeBuild"
+                    }
                 }
             }
         }
