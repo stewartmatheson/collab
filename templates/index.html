@@ -6,6 +6,14 @@
     </div>
 
     <div id="post">
+        <div>
+            <ul>
+                {foreach from=$posts item=post}
+                    <li>{$post->body}</li>
+                {/foreach}
+            </ul>
+
+        </div>
         <form>
             <textarea placeholder="type your message to the group"></textarea>
         </form>

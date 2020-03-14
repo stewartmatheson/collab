@@ -19,7 +19,8 @@ class SmartyTemplateManager extends Smarty implements ITemplateManager {
         $this->assign('app_name', 'Collab');
     }
 
-    public function render(string $templateName) {
+    public function render(string $templateName, array $templateValues) {
+        $this->assign($templateValues);
         $this->display($templateName . ".html");
     }
     

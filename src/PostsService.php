@@ -3,6 +3,7 @@
 namespace Collab;
 
 use \PDO;
+use Collab\PostServicePersistenceException;
 
 class PostsService {
 
@@ -13,14 +14,17 @@ class PostsService {
     }
 
     public function save(string $postBody, string $userEmail): string {
-        $sth = $this->dbh->prepare('INSERT INTO Posts (body, userEmail) VALUES (?,?);');
-        $success = $sth->execute(array($postBody, $userEmail));
-        if (!$success) {
-            print_r($this->dbh->errorInfo());
-            print_r($sth->errorInfo());
-            return null;
-        } else {
+        try {
+            $sth = $this->dbh->prepare('INSERT INTO Posts (body, userEmail) VALUES (?,?);');
+            $success = $sth->execute(array($postBody, $userEmail));
             return $this->dbh->lastInsertId();
+        } catch (PDOException $exception) {
+            throw new PostServicePersistenceException();
         }
+    }
+
+    public function getAll(): array {
+        $sth = $this->dbh->query('SELECT body FROM Posts LIMIT 0, 20;');
+        return $sth->fetchAll(PDO::FETCH_CLASS, "Collab\PostEntity");
     }
 }

@@ -21,17 +21,14 @@ class Context {
         $user = 'root';
         $password = 'secret';
 
-        try {
-            $dbh = new PDO($dsn, $user, $password);
-            $this->postsService = new PostsService($dbh);
-            $this->usersService = new UsersService($dbh);
-            $templateManager = new SmartyTemplateManager();
-            $controller = new Controller($templateManager, $this->postsService);
-            $security = new NoopSecurity();
-            $this->application = new Application($controller, $security);
-        } catch (PDOException $e) {
-            echo 'Connection failed: ' . $e->getMessage();
-        }
+        $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+        $dbh = new PDO($dsn, $user, $password, $options);
+        $this->postsService = new PostsService($dbh);
+        $this->usersService = new UsersService($dbh);
+        $templateManager = new SmartyTemplateManager();
+        $controller = new Controller($templateManager, $this->postsService);
+        $security = new NoopSecurity();
+        $this->application = new Application($controller, $security);
     }
 
     public function start(string $incomingPath) {

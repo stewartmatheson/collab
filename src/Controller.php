@@ -15,7 +15,10 @@ class Controller {
     }
 
     public function index() {
-        $this->templateManager->render("index");
+        $this->templateManager->render(
+            "index", 
+            array("posts" => $this->postsService->getAll())
+        );
     }
 
     public function about() {
