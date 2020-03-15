@@ -3,7 +3,9 @@
         "CollabVPC": {
             "Type": "AWS::EC2::VPC",
             "Properties": {
-                "CidrBlock": "10.192.0.0/16"
+                "CidrBlock": "10.192.0.0/16",
+                "EnableDnsHostnames": true,
+                "EnableDnsSupport": true
             }
         },
 
@@ -152,7 +154,10 @@
                                         "ec2:DescribeSecurityGroups",
                                         "ec2:DescribeVpcs",
                                         "logs:CreateLogGroup",
-                                        "logs:CreateLogStream"
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents",
+                                        "elasticfilesystem:ClientMount",
+                                        "elasticfilesystem:ClientWrite"
                                     ], 
                                     "Resource": "*" 
                                 }
@@ -188,9 +193,33 @@
             }
         },
 
-        "CollabVolumes": {
+        "CollabApplicationFileSystem": {
             "Type": "AWS::EFS::FileSystem",
             "Properties": {}
+        },
+
+        "CollabApplicationFileSystemSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "DependsOn": "CollabVPC",
+            "Properties": {
+                "GroupDescription": "CollabApplicationFileSystemSecurityGroup",
+                "VpcId": { "Ref": "CollabVPC" },
+                "SecurityGroupIngress" : [{
+                    "IpProtocol" : "tcp",
+                    "FromPort" : 2049,
+                    "ToPort" : 2049,
+                    "CidrIp" : "0.0.0.0/0"
+                }]
+            }
+        },
+
+        "CollabApplicationFileSystemMountTarget": {
+            "Type" : "AWS::EFS::MountTarget",
+            "Properties" : {
+                "FileSystemId" : { "Ref": "CollabApplicationFileSystem"},
+                "SecurityGroups" : [ { "Ref": "CollabApplicationFileSystemSecurityGroup"} ],
+                "SubnetId" : { "Ref": "PrivateSubnet" }
+            }
         },
 
         "ApplicationBuild": {
@@ -214,12 +243,12 @@
                             "Fn::Join" : [ 
                                 "",
                                 [
-                                    { "Ref": "CollabVolumes" },
+                                    { "Ref": "CollabApplicationFileSystem" },
                                     ".efs.ap-southeast-2.amazonaws.com:/"
                                 ]
                             ]
                         },
-                        "MountPoint": "/var/lib/docker/volumes",
+                        "MountPoint": "/collab-deployment",
                         "Type": "EFS"
                     }
                 ],
@@ -235,7 +264,7 @@
                 },
                 "LogsConfig": {
                     "CloudWatchLogs": {
-                        "Status": "DISABLED"
+                        "Status": "ENABLED"
                     }
                 }
             }
