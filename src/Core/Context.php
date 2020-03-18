@@ -34,7 +34,7 @@ class Context {
     }
 
     public function start(string $incomingPath) {
-        $response = $this->application->route($incomingPath);
+        $response = $this->application->start($incomingPath);
         $response->render();
     }
 

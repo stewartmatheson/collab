@@ -31,6 +31,7 @@ class NotFoundResponse implements IResponse {
 
 
 class Application {
+    private static array $routes = [];
 
     private Controller $controller;
     private ISecurity $security;
@@ -40,7 +41,11 @@ class Application {
         $this->security = $security;
     }
 
-    public function route (string $path): IResponse {
+    public static function route (string $path, string $controllerLocation) {
+        self::$routes.push(new Route($path));
+    }
+
+    public function start (string $path): IResponse {
         if (!$this->security->validate()) {
             return new UnauthorisedResponse();
         }
@@ -59,7 +64,7 @@ class Application {
     }
 
     private function getMatchedRoute(Request $request): ?Route {
-        foreach($this->routes as $route) {
+        foreach(self::$routes as $route) {
             if ($route->match($route, $request)) {
                 return $route;                
             }
