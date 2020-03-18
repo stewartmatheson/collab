@@ -1,8 +1,8 @@
 <?php 
 
-namespace Collab;
+namespace Collab\Core;
 
-use Collab\ISecurity;
+use Collab\Core\ISecurity;
 
 class NoopSecurity implements ISecurity {
     public function validate() {

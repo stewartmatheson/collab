@@ -1,9 +1,9 @@
 <?php
 
-namespace Collab;
+namespace Collab\Application;
 
 use \PDO;
-use Collab\PostServicePersistenceException;
+use Collab\Application\PostServicePersistenceException;
 
 class PostsService {
 

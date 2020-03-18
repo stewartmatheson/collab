@@ -1,6 +1,8 @@
 <?php
 
-namespace Collab;
+namespace Collab\Core;
+
+use Collab\Application\Controller;
 
 interface IResponse {
     function render();
@@ -48,7 +50,7 @@ class Application {
     }
 
     private function dispatch(Request $request): IResponse {
-        $matchedRoute = $this->getMatchedRoute();
+        $matchedRoute = $this->getMatchedRoute($request);
         if (isset($matchedRoute)) {
             return $matchedRoute->execute($request);
         }

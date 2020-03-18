@@ -1,8 +1,8 @@
 <?php
 
-namespace Collab;
+namespace Collab\Application;
 
-use Collab\ITemplateManager;
+use Collab\Core\ITemplateManager;
 
 class Controller {
 

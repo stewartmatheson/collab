@@ -1,6 +1,6 @@
 <?php
 
-namespace Collab;
+namespace Collab\Application;
 
 use \PDO;
 

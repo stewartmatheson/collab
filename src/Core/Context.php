@@ -1,12 +1,14 @@
 <?php
 
-namespace Collab;
+namespace Collab\Core;
 
-use Collab\Application;
-use Collab\SmartyTemplateManager;
-use Collab\NoopSecurity;
-use Collab\PostsService;
-use Collab\UsersService;
+use Collab\Core\Application;
+use Collab\Core\SmartyTemplateManager;
+use Collab\Core\NoopSecurity;
+
+use Collab\Application\PostsService;
+use Collab\Application\UsersService;
+use Collab\Application\Controller;
 use \PDO;
 
 class Context {
@@ -32,7 +34,7 @@ class Context {
     }
 
     public function start(string $incomingPath) {
-        $response = $this->application->run($incomingPath);
+        $response = $this->application->route($incomingPath);
         $response->render();
     }
 

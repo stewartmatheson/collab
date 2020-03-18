@@ -1,6 +1,6 @@
 <?php
 
-namespace Collab;
+namespace Collab\Core;
 
 interface ITemplateManager {
     public function render(string $templateName, array $templateValues);

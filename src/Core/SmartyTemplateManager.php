@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Collab;
+namespace Collab\Core;
 
-use Collab\ITemplateManager;
+use Collab\Core\ITemplateManager;
 use Smarty;
 
 class SmartyTemplateManager extends Smarty implements ITemplateManager {

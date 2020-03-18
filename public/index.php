@@ -2,8 +2,8 @@
 
 require '../vendor/autoload.php';
 
-use Collab\Context;
+use Collab\Core\Context;
 
 $context = new Context();
-$context->route($_GET['q'] ? $_GET['q'] : "");
+$context->start($_GET['q'] ? $_GET['q'] : "");
 
