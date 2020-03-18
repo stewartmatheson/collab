@@ -1,6 +1,6 @@
 <?php
 
-namespace Collab;
+namespace Collab\Core;
 
 class RouteMatchResult {
 

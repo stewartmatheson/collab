@@ -3,6 +3,8 @@
 namespace Collab\Core;
 
 use Collab\Application\Controller;
+use Collab\Core\Route;
+include_once __DIR__ . "/../Application/routes.php";
 
 interface IResponse {
     function render();
@@ -29,7 +31,6 @@ class NotFoundResponse implements IResponse {
 }
 
 
-
 class Application {
     private static array $routes = [];
 
@@ -42,7 +43,7 @@ class Application {
     }
 
     public static function route (string $path, string $controllerLocation) {
-        self::$routes.push(new Route($path));
+        array_push(self::$routes, new Route($path));
     }
 
     public function start (string $path): IResponse {
@@ -65,7 +66,7 @@ class Application {
 
     private function getMatchedRoute(Request $request): ?Route {
         foreach(self::$routes as $route) {
-            if ($route->match($route, $request)) {
+            if ($route->match($request->getPath())) {
                 return $route;                
             }
         }

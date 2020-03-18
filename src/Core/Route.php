@@ -1,8 +1,9 @@
 <?php
 
-namespace Collab;
+namespace Collab\Core;
 
-use Collab\Request;
+use Collab\Core\Request;
+use Collab\Core\RouteMatchResult;
 
 class MatchPathPartResult {
 
@@ -59,6 +60,10 @@ class Route {
 
     function __construct(string $pathMatcher) {
         $this->pathMatcher = $pathMatcher;
+    }
+
+    public function execute(Request $request): IResponse {
+        return new OKResponse();
     }
 
     public function match(string $incomingPath): RouteMatchResult {
