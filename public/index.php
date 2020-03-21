@@ -15,6 +15,6 @@ $router->route("/about", "About/index");
 $currentPath = $_GET['q'] ? $_GET['q'] : "";
 $route = $router->execute($currentPath);
 
-$viewsFolder = __DIR__ . "/../src/Application/Views/";
+$viewsFolder = __DIR__ . "/../views/";
 require $viewsFolder . $route->getViewName() . ".php";
 

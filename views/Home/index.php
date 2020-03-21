@@ -5,14 +5,14 @@
     👋 Looks like your new here. Why not take the time and say Hi?
 </div>
 
-<div id="post">
-    <?php while($post = $postsCursr->fetch()): ?> 
-        <div>
+<div id="posts">
+    <?php while($post = $postsCursor->fetch()): ?> 
+        <div class="post">
             <?= $post->body ?>
         </div>
     <?php endwhile; ?>
 
-    <form>
+    <form action="/posts" method="POST">
         <textarea placeholder="type your message to the group"></textarea>
     </form>
 </div>

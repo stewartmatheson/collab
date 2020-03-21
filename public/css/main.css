@@ -125,6 +125,9 @@ main #announce {
     margin-bottom: 1em;
 }
 
+main .post {
+    margin-bottom: 1em;
+}
 
 textarea {
     box-sizing: border-box;
@@ -133,6 +136,13 @@ textarea {
     resize: none;
     overflow: hidden;
     height: 10em;
+}
+
+footer {
+    display: flex;
+    max-width: 1000px;
+    margin: 1em auto 1.2em auto;
+    font-size: 0.8em;
 }
 
 /* ==========================================================================
