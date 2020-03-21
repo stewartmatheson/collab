@@ -1,7 +1,6 @@
 {
     "name": "stewart/collab",
     "require": {
-        "smarty/smarty": "^3.1"
     },
     "authors": [
         {

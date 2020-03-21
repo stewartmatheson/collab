@@ -23,8 +23,10 @@ class PostsService {
         }
     }
 
-    public function getAll(): array {
-        $sth = $this->dbh->query('SELECT body FROM Posts LIMIT 0, 20;');
-        return $sth->fetchAll(PDO::FETCH_CLASS, "Collab\PostEntity");
+    public function all() {
+        $sth = $this->dbh->prepare('SELECT body FROM Posts LIMIT 20;');
+        $sth->setFetchMode(PDO::FETCH_CLASS, "Collab\Application\PostEntity");
+        $sth->execute();
+        return $sth;
     }
 }

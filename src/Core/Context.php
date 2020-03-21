@@ -2,47 +2,42 @@
 
 namespace Collab\Core;
 
-use Collab\Core\Application;
-use Collab\Core\SmartyTemplateManager;
-use Collab\Core\NoopSecurity;
+use Collab\Core\Router;
 
 use Collab\Application\PostsService;
 use Collab\Application\UsersService;
-use Collab\Application\Controller;
 use \PDO;
 
 class Context {
 
-    private PostsService $postsService;
-    private UsersService $usersService;
-
-    private Application $application;
+    private array $registeredComponents;
 
     function __construct () {
         $dsn = 'mysql:dbname=collab;host=127.0.0.1';
         $user = 'root';
         $password = 'secret';
-
         $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
         $dbh = new PDO($dsn, $user, $password, $options);
-        $this->postsService = new PostsService($dbh);
-        $this->usersService = new UsersService($dbh);
-        $templateManager = new SmartyTemplateManager();
-        $controller = new Controller($templateManager, $this->postsService);
-        $security = new NoopSecurity();
-        $this->application = new Application($controller, $security);
+
+        $postsService = new PostsService($dbh);
+        $this->registerComponent("PostsService", $postsService);
+
+        $usersService = new UsersService($dbh);
+        $this->registerComponent("UsersService", $usersService);
+
+        $router = new Router();
+        $this->registerComponent("Router", $router);
     }
 
-    public function start(string $incomingPath) {
-        $response = $this->application->start($incomingPath);
-        $response->render();
+    public function getComponentByName(string $name) {
+        if (!isset($this->registeredComponents[$name])) {
+            throw new Exception("Component not found " . $name);
+        } else {
+            return $this->registeredComponents[$name];
+        }
     }
 
-    public function getPostsService() {
-        return $this->postsService;
-    }
-
-    public function getUsersService() {
-        return $this->usersService;
+    private function registerComponent(string $name, $component) {
+        $this->registeredComponents[$name] = $component;
     }
 }

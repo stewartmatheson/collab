@@ -17,7 +17,10 @@ class MatchPathPartResult {
         $this->hasValue = false;
     }
 
-    public static function withValue (bool $isMatch, string $name, string $value): MatchPathPartResult {
+    public static function withValue (
+        bool $isMatch, string $name, string $value
+    ): MatchPathPartResult {
+
         $instance = new self($isMatch);
         $instance->setName($name);
         $instance->setValue($value);
@@ -57,13 +60,15 @@ class MatchPathPartResult {
 class Route {
 
     private string $pathMatcher;
+    private string $viewName;
 
-    function __construct(string $pathMatcher) {
+    function __construct(string $pathMatcher, string $viewName) {
         $this->pathMatcher = $pathMatcher;
+        $this->viewName = $viewName;
     }
 
-    public function execute(Request $request): IResponse {
-        return new OKResponse();
+    public function getViewName() {
+        return $this->viewName;
     }
 
     public function match(string $incomingPath): RouteMatchResult {
@@ -71,7 +76,7 @@ class Route {
         $matchPathParts = explode("/", $this->pathMatcher);
 
         if (count($incomingPathParts) !== count($matchPathParts)) {
-            return new RouteMatchResult(false);
+            return new RouteMatchResult(false, []);
         }
         
         $routePathValues = array();
@@ -82,7 +87,7 @@ class Route {
             );
 
             if (!$matchPartResult->getIsMatch()) {
-                return new RouteMatchResult(false);
+                return new RouteMatchResult(false, []);
             }
 
             if ($matchPartResult->getHasValue()) {
