@@ -15,8 +15,14 @@ $router->route("/posts", "Posts/create");
 // TODO : this should be private moving forward. We most likely will need 
 // a more generic abstraction but at this point I'm not sure what it is
 $currentPath = $_GET['q'] ? $_GET['q'] : "";
-$route = $router->execute($currentPath);
 
-$viewsFolder = __DIR__ . "/../views/";
-require $viewsFolder . $route->getViewName() . ".php";
+try {
+    $route = $router->execute($currentPath);
+    $viewsFolder = __DIR__ . "/../views/";
+    require $viewsFolder . $route->getViewName() . ".php";
+} catch (\Collab\Core\SecurityException $e) {
+    header("HTTP/1.0 401 Unauthorized");
+} catch (\Collab\Core\RouteNotFound $e) {
+    header("HTTP/1.0 404 Not Found");
+} 
 

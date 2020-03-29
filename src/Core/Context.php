@@ -19,13 +19,17 @@ class Context {
         $options = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
         $dbh = new PDO($dsn, $user, $password, $options);
 
+
         $postsService = new PostsService($dbh);
         $this->registerComponent("PostsService", $postsService);
 
         $usersService = new UsersService($dbh);
         $this->registerComponent("UsersService", $usersService);
 
-        $router = new Router();
+        $security = new NoopSecurity();
+        $this->registerComponent("Security", $security);
+
+        $router = new Router($security);
         $this->registerComponent("Router", $router);
     }
 

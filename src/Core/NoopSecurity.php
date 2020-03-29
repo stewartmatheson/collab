@@ -5,11 +5,14 @@ namespace Collab\Core;
 use Collab\Core\ISecurity;
 
 class NoopSecurity implements ISecurity {
-    public function validate() {
+
+    public function validate() : bool {
         return true;
     }
 
     public function getContext() : SecurityContext {
-        return new SecurityContext();
+        $email = "someone140758@somewhere.com";
+        $displayName = "Stewart M";
+        return new SecurityContext($email, $displayName);
     }
 }

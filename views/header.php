@@ -1,3 +1,5 @@
+<?php $securityContext = $context->getComponentByName("Security")->getContext(); ?>
+
 <!doctype html>
 <html class="no-js" lang="">
 
@@ -29,7 +31,7 @@
     <div id="links">
         <a href="?q=/">Home</a>
         <a href="?q=/about">About</a>
-        <a href="?q=/logout">Logout</a>
+        <a href="?q=/logout">Logout (<?= $securityContext->getDisplayName() ?>)</a>
     </div>
   </header>
     
