@@ -10,6 +10,8 @@ $router = $context->getComponentByName("Router");
 $router->route("/", "Home/index");
 $router->route("/about", "About/index");
 
+$router->route("/posts", "Posts/create");
+
 // TODO : this should be private moving forward. We most likely will need 
 // a more generic abstraction but at this point I'm not sure what it is
 $currentPath = $_GET['q'] ? $_GET['q'] : "";

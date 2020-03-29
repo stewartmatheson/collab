@@ -1,6 +1,6 @@
 <?php
 
-namespace Collab; 
+namespace Collab\Application; 
 
 class PostServicePersistenceException extends \RuntimeException {
     function __construct($message) {
