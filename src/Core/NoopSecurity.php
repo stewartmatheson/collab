@@ -16,3 +16,4 @@ class NoopSecurity implements ISecurity {
         return new SecurityContext($email, $displayName);
     }
 }
+

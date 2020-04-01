@@ -1,6 +1,7 @@
 {
     "name": "stewart/collab",
     "require": {
+        "aws/aws-sdk-php": "^3.134"
     },
     "authors": [
         {

@@ -129,6 +129,42 @@ main .post {
     margin-bottom: 1em;
 }
 
+#signup {
+    display: flex;
+    height: 100%;
+}
+
+#signup img {
+    margin-bottom: 2em;
+}
+
+#signup > div {
+    padding: 3em;
+}
+
+#signup > div:first-child {
+    width: 300px;
+}
+
+#signup form div input:not([type=submit]) {
+    padding: 1em 0.5em;
+    margin-bottom: 1em;
+}
+
+#signup form div input[type=submit] {
+    border: 0px;
+    padding: 1em;
+}
+
+#signup label {
+    font-size: 0.9em;
+}
+
+.highlight-color {
+    background-color: #0074D9;
+    color: #fff;
+}
+
 textarea {
     box-sizing: border-box;
     padding: 1em;

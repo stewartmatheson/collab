@@ -6,6 +6,7 @@ use Collab\Core\Router;
 
 use Collab\Application\PostsService;
 use Collab\Application\UsersService;
+use Aws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use \PDO;
 
 class Context {
@@ -23,7 +24,12 @@ class Context {
         $postsService = new PostsService($dbh);
         $this->registerComponent("PostsService", $postsService);
 
-        $usersService = new UsersService($dbh);
+        $awsClient = new CognitoIdentityProviderClient([
+            'region'  => 'ap-southeast-2',
+            'version' => '2016-04-18'
+        ]);
+
+        $usersService = new UsersService($dbh, $awsClient);
         $this->registerComponent("UsersService", $usersService);
 
         $security = new NoopSecurity();

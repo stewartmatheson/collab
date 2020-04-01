@@ -9,8 +9,10 @@ $router = $context->getComponentByName("Router");
 
 $router->route("/", "Home/index");
 $router->route("/about", "About/index");
-
 $router->route("/posts", "Posts/create");
+
+$router->route("/register", "Users/new");
+$router->route("/users/create", "Users/create");
 
 // TODO : this should be private moving forward. We most likely will need 
 // a more generic abstraction but at this point I'm not sure what it is
