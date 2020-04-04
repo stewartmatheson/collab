@@ -26,7 +26,7 @@ class UsersService {
         }
 
         $this->awsClient->signUp([
-            'ClientId' => "2v72javunan3p5drkdknqsr7eq",
+            'ClientId' => "2p0nkdl18ismnn55n2dhd36cr5",
             'Username' => $sanitizedEmail,
             'Password' => $password,
             'UserAttributes' => [

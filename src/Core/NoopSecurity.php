@@ -3,10 +3,11 @@
 namespace Collab\Core;
 
 use Collab\Core\ISecurity;
+use Collab\Core\Request;
 
 class NoopSecurity implements ISecurity {
 
-    public function validate() : bool {
+    public function validate(Request $request) : bool {
         return true;
     }
 

@@ -1,4 +1,4 @@
-<?php require __DIR__ . '/empty_header.php' ?>
+<?php require __DIR__ . '/../empty_header.php' ?>
 
 <div id="signup">
 
@@ -53,4 +53,4 @@
 </div>
 
 
-<?php require __DIR__ . '/empty_footer.php' ?>
+<?php require __DIR__ . '/../empty_footer.php' ?>

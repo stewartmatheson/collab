@@ -61,10 +61,16 @@ class Route {
 
     private string $pathMatcher;
     private string $viewName;
+    private bool $isSecure;
 
-    function __construct(string $pathMatcher, string $viewName) {
+    function __construct(string $pathMatcher, string $viewName, bool $isSecure) {
         $this->pathMatcher = $pathMatcher;
         $this->viewName = $viewName;
+        $this->isSecure = $isSecure;
+    }
+
+    public function getIsSecure(): bool {
+        return $this->isSecure;
     }
 
     public function getViewName() {

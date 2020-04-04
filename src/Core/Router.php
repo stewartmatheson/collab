@@ -3,6 +3,7 @@
 namespace Collab\Core;
 
 use Collab\Core\Route;
+use Collab\Core\Request;
 use Collab\Core\ISecurity;
 
 class RouteNotFound extends \Exception {}
@@ -16,22 +17,28 @@ class Router {
         $this->security = $security;
     }
 
-    public function route(string $path, string $viewName) {
-        array_push($this->routes, new Route($path, $viewName));
+    public function route(string $path, string $viewName, bool $isSecure) {
+        array_push($this->routes, new Route($path, $viewName, $isSecure));
     }
 
-    public function execute(string $path): ?Route {
-        if (!$this->security->validate()) {
-            throw new SecurityException();
-        }
+    public function execute(Request $request): ?Route {
 
         foreach($this->routes as $route) {
-            $routeMatchResult = $route->match($path);
+            $routeMatchResult = $route->match($request->getPath());
             if ($routeMatchResult->getIsMatch()) {
+                $this->testSecurity($route, $request);
                 return $route;                
             } 
         }
         throw new RouteNotFound();
+    }
+
+    private function testSecurity(Route $route, Request $request) {
+        if ($route->getIsSecure()) {
+            if (!$this->security->validate($request)) {
+                throw new SecurityException();
+            }
+        }
     }
 }
 

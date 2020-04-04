@@ -6,6 +6,7 @@ use Collab\Core\Router;
 
 use Collab\Application\PostsService;
 use Collab\Application\UsersService;
+use Collab\Application\SessionsService;
 use Aws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use \PDO;
 
@@ -32,7 +33,11 @@ class Context {
         $usersService = new UsersService($dbh, $awsClient);
         $this->registerComponent("UsersService", $usersService);
 
-        $security = new NoopSecurity();
+        $sessionsService = new SessionsService($awsClient);
+        $this->registerComponent("SessionsService", $sessionsService);
+
+        // $security = new NoopSecurity();
+        $security = new CognitoSecurity($awsClient);
         $this->registerComponent("Security", $security);
 
         $router = new Router($security);
@@ -41,7 +46,7 @@ class Context {
 
     public function getComponentByName(string $name) {
         if (!isset($this->registeredComponents[$name])) {
-            throw new Exception("Component not found " . $name);
+            throw new \Exception("Component not found " . $name);
         } else {
             return $this->registeredComponents[$name];
         }
