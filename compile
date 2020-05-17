@@ -1,0 +1,1 @@
+./configure --prefix=/home/stewart/Projects/php/install --without-sqlite3 --without-pdo-sqlite --with-openssl --with-zlib --enable-mbstring --with-pdo-mysql
